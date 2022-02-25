@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BF to C</title>
+</head>
+<body>
+    <b>Brainfuck to C compiler:</b><br>
+    <textarea id="input" rows="10" cols="50"></textarea><br>
+    <button onclick="compile()">Compile!</button>
+    <br>
+    Output:<br>
+    <textarea id="output" rows="10" cols="50"></textarea>
+
+
+    <script>
+        function compile() {
+            var input = document.getElementById("input").value;
+            var output = document.getElementById("output");
+
+            output.value = "";
+            output.value += "#include <stdio.h>\n";
+            output.value += "unsigned char mem[30000];\n";
+            output.value += "int main() {\n";
+            output.value += "int ptr = 0;\n";
+
+            for(var i=0; i<input.length; i++) {
+                var ch = input.charAt(i);
+                if(ch == '+') {
+                    output.value += "mem[ptr]++;\n";
+                } else if(ch == '-') {
+                    output.value += "mem[ptr]--;\n";
+                } else if(ch == '>') {
+                    output.value += "ptr++;\n";
+                } else if(ch == '<') {
+                    output.value += "ptr--;\n";
+                } else if(ch == '.') {
+                    output.value += "putchar(mem[ptr]);\n";
+                } else if(ch == ',') {
+                    output.value += "mem[ptr] = getchar();\n";
+                } else if(ch == '[') {
+                    output.value += "while(mem[ptr]) {\n";
+                } else if(ch == ']') {
+                    output.value += "}\n";
+                }
+            }
+            output.value += "return 0;\n";
+            output.value += "}\n";
+
+            return false;
+        }
+    </script>
+</body>
+</html>

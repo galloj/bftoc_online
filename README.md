@@ -1,2 +1,2 @@
-# bftoc_online
+# Brainfuck to C
 Online Brainfuck to C translator
