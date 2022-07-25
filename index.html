@@ -29,21 +29,61 @@
             for(var i=0; i<input.length; i++) {
                 var ch = input.charAt(i);
                 if(ch == '+') {
-                    output.value += "mem[ptr]++;\n";
+                    let plusCount = 1;
+                    while(input.charAt(++i) == "+") plusCount++;
+                    i--;
+                    if(plusCount == 1) {
+                        output.value += "mem[ptr]++;\n";
+                    } else {
+                        output.value += "mem[ptr] += " + plusCount + ";\n";
+                    }
                 } else if(ch == '-') {
-                    output.value += "mem[ptr]--;\n";
+                    let minusCount = 1;
+                    while(input.charAt(++i) == "-") minusCount++;
+                    i--;
+                    if(minusCount == 1) {
+                        output.value += "mem[ptr]--;\n";
+                    } else {
+                        output.value += "mem[ptr] -= " + minusCount + ";\n";
+                    }
                 } else if(ch == '>') {
-                    output.value += "ptr++;\n";
+                    let greaterCount = 1;
+                    while(input.charAt(++i) == ">") greaterCount++;
+                    i--;
+                    if(greaterCount == 1) {
+                        output.value += "ptr++;\n";
+                    } else {
+                        output.value += "ptr += " + greaterCount + ";\n";
+                    }
                 } else if(ch == '<') {
-                    output.value += "ptr--;\n";
+                    let lessCount = 1;
+                    while(input.charAt(++i) == "<") lessCount++;
+                    i--;
+                    if(lessCount == 1) {
+                        output.value += "ptr--;\n";
+                    } else {
+                        output.value += "ptr -= " + lessCount + ";\n";
+                    }
                 } else if(ch == '.') {
                     output.value += "putchar(mem[ptr]);\n";
                 } else if(ch == ',') {
                     output.value += "mem[ptr] = getchar();\n";
                 } else if(ch == '[') {
-                    output.value += "while(mem[ptr]) {\n";
+                    if((input.charAt(i+1) == '+' || input.charAt(i+1) == '-') && input.charAt(i+2) == ']') {
+                        output.value += "mem[ptr] = 0;\n";
+                        i += 2;
+                    } else {
+                        output.value += "while(mem[ptr]) {\n";
+                    }
                 } else if(ch == ']') {
                     output.value += "}\n";
+                } else if(ch != ' ' && ch != '\n' && ch != '\t' && ch != '\r') {
+                    output.value += "// " + ch;
+                    while(input.charAt(i+1) != undefined && !"+-><,.[]\n\r".includes(input.charAt(i+1))) {
+                        output.value += input.charAt(i+1);
+                        i++;
+                    }
+                    output.value += "\n";
                 }
             }
             output.value += "return 0;\n";
