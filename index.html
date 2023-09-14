@@ -7,90 +7,17 @@
     <title>BF to C</title>
 </head>
 <body>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="scripts/ast.ts" type="text/babel" data-presets="typescript"></script>
+    <script src="scripts/input_parser.ts" type="text/babel" data-presets="typescript"></script>
+    <script src="scripts/main.ts" type="text/babel" data-presets="typescript"></script>
+    <script src="scripts/optimizer.ts" type="text/babel" data-presets="typescript"></script>
+    <script src="scripts/output_generator.ts" type="text/babel" data-presets="typescript"></script>
     <b>Brainfuck to C compiler:</b><br>
     <textarea id="input" rows="10" cols="50"></textarea><br>
-    <button onclick="compile()">Compile!</button>
+    <button onclick="void compile()">Compile!</button>
     <br>
     Output:<br>
     <textarea id="output" rows="10" cols="50"></textarea>
-
-
-    <script>
-        function compile() {
-            var input = document.getElementById("input").value;
-            var output = document.getElementById("output");
-
-            output.value = "";
-            output.value += "#include <stdio.h>\n";
-            output.value += "int main() {\n";
-            output.value += "unsigned char mem[30000] = {0};\n";
-            output.value += "int ptr = 0;\n";
-
-            for(var i=0; i<input.length; i++) {
-                var ch = input.charAt(i);
-                if(ch == '+') {
-                    let plusCount = 1;
-                    while(input.charAt(++i) == "+") plusCount++;
-                    i--;
-                    if(plusCount == 1) {
-                        output.value += "mem[ptr]++;\n";
-                    } else {
-                        output.value += "mem[ptr] += " + plusCount + ";\n";
-                    }
-                } else if(ch == '-') {
-                    let minusCount = 1;
-                    while(input.charAt(++i) == "-") minusCount++;
-                    i--;
-                    if(minusCount == 1) {
-                        output.value += "mem[ptr]--;\n";
-                    } else {
-                        output.value += "mem[ptr] -= " + minusCount + ";\n";
-                    }
-                } else if(ch == '>') {
-                    let greaterCount = 1;
-                    while(input.charAt(++i) == ">") greaterCount++;
-                    i--;
-                    if(greaterCount == 1) {
-                        output.value += "ptr++;\n";
-                    } else {
-                        output.value += "ptr += " + greaterCount + ";\n";
-                    }
-                } else if(ch == '<') {
-                    let lessCount = 1;
-                    while(input.charAt(++i) == "<") lessCount++;
-                    i--;
-                    if(lessCount == 1) {
-                        output.value += "ptr--;\n";
-                    } else {
-                        output.value += "ptr -= " + lessCount + ";\n";
-                    }
-                } else if(ch == '.') {
-                    output.value += "putchar(mem[ptr]);\n";
-                } else if(ch == ',') {
-                    output.value += "mem[ptr] = getchar();\n";
-                } else if(ch == '[') {
-                    if((input.charAt(i+1) == '+' || input.charAt(i+1) == '-') && input.charAt(i+2) == ']') {
-                        output.value += "mem[ptr] = 0;\n";
-                        i += 2;
-                    } else {
-                        output.value += "while(mem[ptr]) {\n";
-                    }
-                } else if(ch == ']') {
-                    output.value += "}\n";
-                } else if(ch != ' ' && ch != '\n' && ch != '\t' && ch != '\r') {
-                    output.value += "// " + ch;
-                    while(input.charAt(i+1) != undefined && !"+-><,.[]\n\r".includes(input.charAt(i+1))) {
-                        output.value += input.charAt(i+1);
-                        i++;
-                    }
-                    output.value += "\n";
-                }
-            }
-            output.value += "return 0;\n";
-            output.value += "}\n";
-
-            return false;
-        }
-    </script>
 </body>
 </html>
