@@ -58,7 +58,7 @@ function generatePointerChangeCode(ast: PointerChangeNode, settings: CodeGenerat
 function generateLoopCode(ast: LoopNode, settings: CodeGenerationSettings): string {
     let generatedOutput = "";
     generatedOutput += settings.indent;
-    generatedOutput += "while(mem[ptr]) {\n";
+    generatedOutput += "while(" + ast.condition + ") {\n";
     let nestedSettings = new CodeGenerationSettings(settings.machineConfiguration, settings.indent + settings.machineConfiguration.indent, true);
     generatedOutput += generateNodeCode(ast.child, nestedSettings);
     generatedOutput += settings.indent + "}\n";

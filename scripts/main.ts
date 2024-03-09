@@ -12,7 +12,7 @@ function compile() {
     }
 
     let ast = parseRoot(input);
-    while(optimize(ast, new MachineState(new MachineConfiguration(255, 0, "    ")))) {
+    while(optimize(ast, new MachineState(new MachineConfiguration(255, 0, "    ")), (newNode => ast = newNode))) {
         console.log("Optimizing...")
     }
     outputElement.value = generateCode(ast);

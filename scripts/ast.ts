@@ -70,7 +70,7 @@ class PointerChangeNode extends ASTNode {
     }
 }
 class LoopNode extends ASTNode {
-    constructor(public child: ASTNode) {
+    constructor(public condition: Value, public child: ListASTNode) {
         super();
     }
 }

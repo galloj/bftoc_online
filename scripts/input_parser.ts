@@ -59,7 +59,7 @@ class ParserException {
     constructor(public message: string, public row: number, public column: number) {}
 }
 
-function parse(input: Tokenizer): ASTNode {
+function parse(input: Tokenizer): ListASTNode {
     let root = new ListASTNode([]);
     let token = input.next();
     while(token != "") {
@@ -76,7 +76,7 @@ function parse(input: Tokenizer): ASTNode {
         } else if(token == ",") {
             root.children.push(new InputNode());
         } else if(token == "[") {
-            let loop = new LoopNode(parse(input));
+            let loop = new LoopNode(new Value(0, new MemoryLocation(0, true)), parse(input));
             root.children.push(loop);
             if (input.peek() != "]") {
                 throw new ParserException("Expected ]", input.prev_row, input.prev_column);
